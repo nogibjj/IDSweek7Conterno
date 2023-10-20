@@ -11,7 +11,7 @@ cargo run --  --message "Ypp dy dro lexuob. Ofobi zobcyx pyb drowcovfoc" --decry
 */
 
 
-use caeser_cipher_cli::{decrypt, encrypt};
+use caeser_cipher_cli::{decrypt, encrypt, analyze_frequency};
 use clap::Parser;
 
 /// CLI tool to encrypt and decrypt messages using the caeser cipher
@@ -25,12 +25,14 @@ struct Args {
     /// decrypt the message
     #[arg(short, long)]
     decrypt: bool,
-
+    ///decrypt without a key
+    #[arg(short, long)]
+    auto_decrypt: bool,
     /// The message to encrypt or decrypt
     #[arg(short, long)]
     message: String,
 
-    /// The shift to use for the cipher
+    /// The shift to use for then cipher
     /// Must be between 1 and 25, the default is 3
     #[arg(short, long, default_value = "3")]
     shift: u8,
@@ -43,7 +45,11 @@ fn main() {
         println!("{}", encrypt(&args.message, args.shift));
     } else if args.decrypt {
         println!("{}", decrypt(&args.message, args.shift));
-    } else {
-        println!("Please specify either --encrypt or --decrypt");
+    } 
+    else if args.auto_decrypt {
+        println!("{}", analyze_frequency(&args.message));
+    }
+    else {
+        println!("Please specify either --encrypt or --decrypt or --auto_decrypt");
     }
 }
